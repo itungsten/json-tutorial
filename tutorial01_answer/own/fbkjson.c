@@ -70,7 +70,14 @@ int fbk_parse(fbk_value* v,const char* json){
     c.json=json;
     v->type=FBK_NULL;
     fbk_parse_whitespace(&c);
-    return fbk_parse_value(&c,v);
+    
+    int ret;
+    if((ret=fbk_parse_value(&c,v))==FBK_PARSE_OK){
+        fbk_parse_whitespace(&c);
+        if(*(c.json)!='\0'){
+            ret=FBK_PARSE_ROOT_NOT_SINGULAR;
+    }
+    return ret;
     //fbk_parse use fbk_parse_whitespace and fbk_parse_value
 }
 fbk_type fbk_get_type(const fbk_value* v){
